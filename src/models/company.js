@@ -13,6 +13,10 @@ class Company {
   isWhatsapp() {
     return this.website.includes("wa.me") || this.website.includes("whatsapp");
   }
+
+  isInstagram() {
+    return this.website.includes("instagram.com");
+  }
 }
 
 module.exports = { Company };

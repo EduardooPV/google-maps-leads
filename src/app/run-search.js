@@ -3,20 +3,24 @@ const { searchFullCompany } = require("../services/company-service");
 const { saveCSV } = require("../infra/csv-write");
 const { saveCoordinate } = require("../infra/google-api");
 const { getOutputPaths } = require("../utils/paths");
+require("dotenv").config();
 
 async function runSearch(city) {
-  const spinner = ora("Iniciando busca de empresas... \n").start();
+  const spinner = ora("Iniciando busca de empresas...").start();
   const erros = [];
 
   try {
-    const results = await searchFullCompany(city, spinner);
-    const { writerWithPath, writerWithoutPath, writerWhatsappPath, outputDir } =
-      getOutputPaths(city);
+    const results = await searchFullCompany(spinner);
+    const {
+      writerWithPath,
+      writerWithoutPath,
+      writerWhatsappPath,
+      writerInstagramPath,
+      outputDir,
+    } = getOutputPaths(city);
 
     try {
-      spinner.text = "Salvando CSV com site...";
       await saveCSV(writerWithPath, results.withSite);
-      spinner.text = `Arquivo 'empresas_com_site.csv' salvo. Total: ${results.withSite.length}`;
     } catch (err) {
       erros.push({
         tipo: "Gravação CSV",
@@ -27,9 +31,7 @@ async function runSearch(city) {
     }
 
     try {
-      spinner.text = "Salvando CSV sem site...";
       await saveCSV(writerWithoutPath, results.withoutSite);
-      spinner.text = `Arquivo 'empresas_sem_site.csv' salvo. Total: ${results.withoutSite.length}`;
     } catch (err) {
       erros.push({
         tipo: "Gravação CSV",
@@ -40,9 +42,7 @@ async function runSearch(city) {
     }
 
     try {
-      spinner.text = "Salvando CSV com WhatsApp...";
       await saveCSV(writerWhatsappPath, results.withWhatsapp);
-      spinner.text = `Arquivo 'empresas_whatsapp.csv' salvo. Total: ${results.withWhatsapp.length}`;
     } catch (err) {
       erros.push({
         tipo: "Gravação CSV",
@@ -50,6 +50,17 @@ async function runSearch(city) {
         erro: err.message,
       });
       console.warn(`❌ Erro ao salvar CSV WhatsApp: ${err.message}`);
+    }
+
+    try {
+      await saveCSV(writerInstagramPath, results.withInstagram);
+    } catch (err) {
+      erros.push({
+        tipo: "Gravação CSV",
+        arquivo: writerInstagramPath,
+        erro: err.message,
+      });
+      console.warn(`❌ Erro ao salvar CSV Instagram: ${err.message}`);
     }
 
     try {
@@ -61,8 +72,12 @@ async function runSearch(city) {
 
     spinner.succeed(`Processo concluído!
          → Novas empresas com site: ${results.withSite.length}
+         → Novas empresas sem site: ${results.withoutSite.length}
          → Novas empresas com link WhatsApp: ${results.withWhatsapp.length}
-         → Novas empresas sem site: ${results.withoutSite.length}`);
+         → Novas empresas com link Instagram: ${results.withInstagram.length}
+         `);
+    
+    console.log('Verifique nas pasta /planilhas/<cidade>')
 
     if (erros.length > 0) {
       const logPath = path.join(outputDir, "log_erros.json");

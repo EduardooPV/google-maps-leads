@@ -8,7 +8,7 @@ Este projeto automatiza a busca de empresas no Google Maps, filtrando e salvando
 - Para cada empresa encontrada, busca detalhes (telefone, site, avaliação).
   - O `queue` é configurado para permitir no máximo 50 requisições por minuto (intervalCap: 50, interval: 60000), respeitando o limite gratuito da API.
   - Ao buscar tem um delay automático de 2 segundos para ativar o `next_page_token`, conforme exigido pela documentação do Google.
-- Classifica empresas em três grupos: com site, sem site, com WhatsApp.
+- Classifica empresas em quatro grupos: com site, sem site, com WhatsApp e com Instagram.
 - Salva os resultados em arquivos CSV na pasta `planilhas/<cidade>/`.
 - Salva também as coordenadas e parâmetros de busca em `coordenadas.json`.
 
@@ -52,6 +52,7 @@ Edite o arquivo `search-config.js`:
   - `com-site.csv` — empresas com site
   - `sem-site.csv` — empresas sem site
   - `com-whatsapp.csv` — empresas com link WhatsApp
+  - `com-instagram.csv` — empresas com link Instagram
   - `coordenadas.json` — histórico dos parâmetros de busca
   - `log_erros.json` — erros ocorridos na execução
 

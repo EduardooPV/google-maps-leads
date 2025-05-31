@@ -3,14 +3,15 @@ const path = require("path");
 const fs = require("fs");
 const PQueue = require("p-queue").default;
 const config = require("../config/search-config");
+require("dotenv").config();
 
 const apiKey = process.env.GOOGLE_API_KEY;
 const { useMock, search } = config;
 
-async function searchPlaces() {
+async function searchPlaces(spinner) {
   if (useMock) return require("./mock").searchPlacesMock();
 
-  return searchPlacesReal();
+  return searchPlacesReal(spinner);
 }
 
 async function getPlaceDetails(placeId) {
@@ -19,7 +20,7 @@ async function getPlaceDetails(placeId) {
   return getPlaceDetailsReal(placeId);
 }
 
-async function searchPlacesReal() {
+async function searchPlacesReal(spinner) {
   const results = [];
   let pageToken = null;
   let page = 1;
@@ -48,9 +49,7 @@ async function searchPlacesReal() {
 
     if (data.results) {
       results.push(...data.results);
-      console.log(
-        `\n🔄 Página ${page} carregada. Total acumulado: ${results.length}`
-      );
+      spinner.text = `🔄 Página ${page} carregada. Total acumulado: ${results.length}`;
     }
 
     pageToken = data.next_page_token;
@@ -103,7 +102,7 @@ async function saveCoordinate(outputDir) {
     areas.push(currentArea);
     fs.writeFileSync(filePath, JSON.stringify(areas, null, 2), "utf-8");
 
-    console.log(`✔️  Arquivo de coordenadas salvo. \n`);
+    console.log(`\n✔️  Arquivo de coordenadas salvo. \n \n`);
   } catch (error) {
     console.error("Erro ao salvar coordenadas:", error);
     throw error;

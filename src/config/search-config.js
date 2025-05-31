@@ -6,7 +6,7 @@
  * true  = usa os dados falsos para testes locais
  * false = consome a API real (requer chave em process.env.GOOGLE_API_KEY)
  */
-const useMock = true;
+const useMock = false;
 
 /**
  * Parâmetros da busca no Google Maps
@@ -21,7 +21,7 @@ const searchParams = {
   /**
    * Raio da busca em metros (máximo permitido pela API é 50.000)
    */
-  radius: 50000,
+  radius: 50,
 
   /**
    * Palavra-chave usada para encontrar estabelecimentos

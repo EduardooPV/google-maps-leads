@@ -13,6 +13,7 @@ function getOutputPaths(city) {
     writerWithPath: path.join(outputDir, "com-site.csv"),
     writerWithoutPath: path.join(outputDir, "sem-site.csv"),
     writerWhatsappPath: path.join(outputDir, "com-whatsapp.csv"),
+    writerInstagramPath: path.join(outputDir, "com-instagram.csv"),
   };
 }
 

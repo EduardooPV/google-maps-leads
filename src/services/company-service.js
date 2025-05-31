@@ -4,12 +4,13 @@ const { Company } = require("../models/company");
 
 const queue = new PQueue({ concurrency: 2, interval: 60000, intervalCap: 50 });
 
-async function searchFullCompany(cidade, spinner) {
-  const results = await searchPlaces();
+async function searchFullCompany(spinner) {
+  const results = await searchPlaces(spinner);
   const withSite = [],
     withoutSite = [],
     withWhatsapp = [],
-    erros = [];
+    withInstagram = [];
+  erros = [];
   let processed = 0;
 
   const promises = results.map((place) =>
@@ -20,19 +21,22 @@ async function searchFullCompany(cidade, spinner) {
 
         if (company.isWhatsapp()) withWhatsapp.push(company);
         else if (company.hasWebsite()) withSite.push(company);
+        else if (company.isInstagram()) withInstagram.push(company);
         else withoutSite.push(company);
       } catch (err) {
         erros.push({ place_id: place.place_id, erro: err.message });
       } finally {
+        spinner.text = `Emmpresas encontradas: ${processed + 2}/${
+          results.length
+        } \n`;
         processed++;
-        spinner.text = `Processados: ${processed}/${results.length}`;
       }
     })
   );
 
   await Promise.all(promises);
 
-  return { withSite, withoutSite, withWhatsapp, erros };
+  return { withSite, withoutSite, withWhatsapp, withInstagram, erros };
 }
 
 module.exports = { searchFullCompany };
