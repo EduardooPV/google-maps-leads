@@ -12,6 +12,9 @@ Este projeto automatiza a busca de empresas no Google Maps, filtrando e salvando
 - Salva os resultados em arquivos CSV na pasta `planilhas/<cidade>/`.
 - Salva também as coordenadas e parâmetros de busca em `coordenadas.json`.
 
+## Preview
+![image](https://github.com/user-attachments/assets/af441113-998e-4744-9000-f4150477f320)
+
 ## Como rodar
 
 1. **Instale as dependências:**
