@@ -21,7 +21,7 @@ const searchParams = {
   /**
    * Raio da busca em metros (máximo permitido pela API é 50.000)
    */
-  radius: 50,
+  radius: 50000,
 
   /**
    * Palavra-chave usada para encontrar estabelecimentos

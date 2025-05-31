@@ -26,7 +26,7 @@ async function searchFullCompany(spinner) {
       } catch (err) {
         erros.push({ place_id: place.place_id, erro: err.message });
       } finally {
-        spinner.text = `Emmpresas encontradas: ${processed + 2}/${
+        spinner.text = `Emmpresas encontradas: ${processed + 1}/${
           results.length
         } \n`;
         processed++;
