@@ -16,7 +16,7 @@ const searchParams = {
    * Localização central da busca (latitude, longitude)
    * Exemplo: São Paulo = "-23.550521,-46.633308"
    */
-  location: "-23.550521,-46.633308",
+  location: "-23.10136335794024,-46.633308",
 
   /**
    * Raio da busca em metros (máximo permitido pela API é 50.000)

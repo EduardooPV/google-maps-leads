@@ -8,8 +8,17 @@ const {
 const { getOutputPaths } = require("../utils/paths");
 require("dotenv").config();
 const { search } = require("../config/search-config");
+const {
+  nextCoordinate,
+  updateSearchConfig,
+} = require("../utils/coordinate-step");
 
 async function runSearch(city) {
+  // Exemplo de uso:
+  const atual = { latitude: -23.550521, longitude: -46.633308 };
+  const proxima = nextCoordinate(atual, "norte"); // ou "sul", "leste", "oeste"
+  updateSearchConfig(proxima.latitude, proxima.longitude);
+
   const { outputDir } = getOutputPaths(city);
   if (alreadySearchedCoordinate(outputDir, search)) {
     console.log("❌ Esta coordenada já foi processada. Abortando execução.");
@@ -88,6 +97,8 @@ async function runSearch(city) {
          `);
 
     console.log("Verifique nas pasta /planilhas/<cidade>");
+
+    spinner.stop();
 
     if (erros.length > 0) {
       const logPath = path.join(outputDir, "log_erros.json");

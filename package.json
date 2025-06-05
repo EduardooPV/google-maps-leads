@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/cli.js"
+    "start": "node src/cli.js",
+    "direction": "node src/utils/next-coordinate.js"
   },
   "keywords": [],
   "author": "",
