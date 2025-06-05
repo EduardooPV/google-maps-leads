@@ -109,8 +109,26 @@ async function saveCoordinate(outputDir) {
   }
 }
 
+function alreadySearchedCoordinate(outputDir, search) {
+  const filePath = path.join(outputDir, "coordenadas.json");
+  if (!fs.existsSync(filePath)) return false;
+  try {
+    const data = fs.readFileSync(filePath, "utf-8");
+    const areas = JSON.parse(data);
+    return areas.some(
+      (area) =>
+        area.location === search.location &&
+        area.radius === search.radius &&
+        area.keyword === search.keyword
+    );
+  } catch {
+    return false;
+  }
+}
+
 module.exports = {
   searchPlaces,
   getPlaceDetails,
   saveCoordinate,
+  alreadySearchedCoordinate,
 };

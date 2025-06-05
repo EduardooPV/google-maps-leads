@@ -15,7 +15,9 @@ class Company {
   }
 
   isInstagram() {
-    return this.website.includes("instagram.com");
+    return (
+      this.website.includes("instagram.com") || this.website.includes("instagram")
+    );
   }
 }
 

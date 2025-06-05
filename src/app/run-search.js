@@ -1,11 +1,21 @@
 const ora = require("ora").default;
 const { searchFullCompany } = require("../services/company-service");
 const { saveCSV } = require("../infra/csv-write");
-const { saveCoordinate } = require("../infra/google-api");
+const {
+  saveCoordinate,
+  alreadySearchedCoordinate,
+} = require("../infra/google-api");
 const { getOutputPaths } = require("../utils/paths");
 require("dotenv").config();
+const { search } = require("../config/search-config");
 
 async function runSearch(city) {
+  const { outputDir } = getOutputPaths(city);
+  if (alreadySearchedCoordinate(outputDir, search)) {
+    console.log("❌ Esta coordenada já foi processada. Abortando execução.");
+    process.exit(1);
+  }
+
   const spinner = ora("Iniciando busca de empresas...").start();
   const erros = [];
 
@@ -76,8 +86,8 @@ async function runSearch(city) {
          → Novas empresas com link WhatsApp: ${results.withWhatsapp.length}
          → Novas empresas com link Instagram: ${results.withInstagram.length}
          `);
-    
-    console.log('Verifique nas pasta /planilhas/<cidade>')
+
+    console.log("Verifique nas pasta /planilhas/<cidade>");
 
     if (erros.length > 0) {
       const logPath = path.join(outputDir, "log_erros.json");
